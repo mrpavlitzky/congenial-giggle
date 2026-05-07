@@ -145,19 +145,19 @@
       const timeLocation = gl.getUniformLocation(program, "u_time");
       const mouseLocation = gl.getUniformLocation(program, "u_mouse");
 
-      const MILLISECONDS_TO_SECONDS = 0.001;
+      const MS_TO_SECONDS = 0.001;
       const mouse = { x: 0, y: 0 };
-      let hasMousePosition = false;
+      let isMouseInitialized = false;
 
       function resize() {
         const dpr = window.devicePixelRatio || 1;
         canvas.width = Math.floor(window.innerWidth * dpr);
         canvas.height = Math.floor(window.innerHeight * dpr);
         gl.viewport(0, 0, canvas.width, canvas.height);
-        if (!hasMousePosition) {
+        if (!isMouseInitialized) {
           mouse.x = canvas.width / 2;
           mouse.y = canvas.height / 2;
-          hasMousePosition = true;
+          isMouseInitialized = true;
         }
       }
 
@@ -166,7 +166,7 @@
         const rect = canvas.getBoundingClientRect();
         mouse.x = (event.clientX - rect.left) * (canvas.width / rect.width);
         mouse.y = canvas.height - (event.clientY - rect.top) * (canvas.height / rect.height);
-        hasMousePosition = true;
+        isMouseInitialized = true;
       });
       resize();
 
@@ -176,7 +176,7 @@
         gl.enableVertexAttribArray(positionLocation);
         gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
         gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-        gl.uniform1f(timeLocation, now * MILLISECONDS_TO_SECONDS);
+        gl.uniform1f(timeLocation, now * MS_TO_SECONDS);
         gl.uniform2f(mouseLocation, mouse.x, mouse.y);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         requestAnimationFrame(render);
